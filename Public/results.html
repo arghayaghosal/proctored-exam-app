@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Exam Scores</title>
+    <style> body { font-family: sans-serif; padding: 20px; background-color: #f4f7f9; } h1 { color: #2c3e50; } table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; } th, td { padding: 12px; border: 1px solid #ddd; text-align: left; } th { background-color: #3498db; color: white; } </style>
+</head>
+<body>
+    <h1>Exam Results</h1>
+    <table><thead><tr><th>Candidate Name</th><th>Score</th><th>Submitted At</th></tr></thead><tbody id="results-body"></tbody></table>
+    <script>
+        const resultsBody = document.getElementById('results-body');
+        async function fetchResults() {
+            const response = await fetch('/api/results');
+            const results = await response.json();
+            resultsBody.innerHTML = '';
+            results.forEach(result => {
+                const date = new Date(result.submittedAt).toLocaleString();
+                resultsBody.innerHTML += `<tr><td>${result.candidateId}</td><td>${result.score}/${result.total}</td><td>${date}</td></tr>`;
+            });
+        }
+        fetchResults();
+        setInterval(fetchResults, 5000);
+    </script>
+</body>
+</html>
