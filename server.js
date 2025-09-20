@@ -35,12 +35,16 @@ let activeCandidates = 0;
 let waitingInterns = {};
 
 io.on('connection', (socket) => {
+    console.log(`🔗 New Socket.IO connection: ${socket.id}`);
     activeCandidates++;
+    console.log(`👥 Active candidates: ${activeCandidates}`);
     io.emit('update-count', activeCandidates);
     io.emit('update-waiting-list', waitingInterns);
     
     socket.on('intern-waiting', (data) => {
+        console.log(`⏳ Intern joining waiting room: ${data.name} (${socket.id})`);
         waitingInterns[socket.id] = { name: data.name };
+        console.log(`📋 Updated waiting list:`, waitingInterns);
         io.emit('update-waiting-list', waitingInterns);
     });
 
