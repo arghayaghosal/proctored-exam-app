@@ -16,12 +16,21 @@ mongoose.connect(MONGO_URI)
     .then(() => console.log('Successfully connected to MongoDB ✅'))
     .catch(err => console.error('Connection error', err));
 
-// All your models and Socket.IO logic go here...
+// All your models and Socket.IO logic...
 
-// This line MUST be correct. It tells Express where to find your HTML files.
+app.use(express.json());
+
+// --- THIS IS THE FIX ---
+// Add this route to handle requests for the root URL
+app.get('/', (req, res) => {
+    res.redirect('/admin.html');
+});
+// --- END OF FIX ---
+
+// This serves all your HTML files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// All your app.get and app.post routes go here...
+// Your API routes...
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
